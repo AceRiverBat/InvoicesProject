@@ -16,3 +16,5 @@ function HomePage(props) {
     </div>
   );
 }
+
+export default HomePage;

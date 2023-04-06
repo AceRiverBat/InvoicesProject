@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import './App.css';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -9,8 +9,9 @@ function Login(props) {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleSubmit = (event) => {
+    const history = useHistory();
+    
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const username = event.target.elements.username.value;
         const password = event.target.elements.password.value;
