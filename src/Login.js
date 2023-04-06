@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import bcrypt from 'bcrypt';
 
 function Login(props) {
     const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function Login(props) {
         event.preventDefault();
         const username = event.target.elements.username.value;
         const password = event.target.elements.password.value;
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         try {
             const response = await fetch('/api/login', {
@@ -22,7 +24,7 @@ function Login(props) {
               },
               body: JSON.stringify({
                 username: username,
-                password: password
+                password: hashedPassword 
               })
             });
             const data = await response.json();
@@ -30,13 +32,13 @@ function Login(props) {
             // Stockage du jeton d'accès dans un cookie sécurisé
             document.cookie = `access_token=${data.access_token}; Secure; SameSite=Strict`;
         
-            // Exemple d'action de connexion réussie
+            // Connexion réussie
             const user = {
               username,
               token: data.access_token,
             };
             dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-            
+
             history.push('/');
           } catch (error) {
             console.error(error);
