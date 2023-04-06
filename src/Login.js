@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -10,7 +10,7 @@ function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory();
-    
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const username = event.target.elements.username.value;
@@ -19,31 +19,31 @@ function Login(props) {
 
         try {
             const response = await fetch('/api/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                username: username,
-                password: hashedPassword 
-              })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: hashedPassword
+                })
             });
             const data = await response.json();
-        
+
             // Stockage du jeton d'accès dans un cookie sécurisé
             document.cookie = `access_token=${data.access_token}; Secure; SameSite=Strict`;
-        
+
             // Connexion réussie
             const user = {
-              username,
-              token: data.access_token,
+                username,
+                token: data.access_token,
             };
             dispatch({ type: 'LOGIN_SUCCESS', payload: user });
 
             history.push('/');
-          } catch (error) {
+        } catch (error) {
             console.error(error);
-          }
+        }
     };
 
     return (
